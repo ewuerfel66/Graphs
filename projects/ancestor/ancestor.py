@@ -1,5 +1,3 @@
-import 
-
 class FamilyTree:
     def __init__(self):
         self.members = {}
@@ -35,49 +33,52 @@ class Stack():
         return len(self.stack)
 
 def earliest_ancestor(ancestors, starting_node):
-    # Instantiate family & possible paths list
+    # Instantiate family & longest path & stack & visited
     family = FamilyTree()
-    possible_paths = []
+    longest_path = []
+    stack = Stack()
+    visited = set()
 
     # Add members
-    for pair in test_ancestors:
+    for pair in ancestors:
         family.add_parent_child(pair)
 
     # If starting_node has no parents, return -1
     if family.get_parents(starting_node) == set():
         return -1
 
-    # Find all possible paths
-    # First, start possible_paths out with lists containing starting_node's parents
-    for parent in family.get_parents(starting_node):
-        possible_paths.append([parent])
+    # Add starting node to stack
+    stack.push([starting_node])
 
-    # # Loop through possible paths and update if they have parents
-    # for path in possible_paths:
-    #     if family.get_parents(path[-1]) != set():
-    #         # Create a new path for each parent
-    #         for parent in family.get_parents(path[-1]):
-    #             new_path = path.append(parent)
-    #             possible_paths.append(new_path)
-    #         # Get rid of old path
-    #         # possible_paths.remove(path)
+    # While stack is not empty:
+    while stack.size() > 0:
 
-    #     else:
-    #         pass
+        # Pop the path and get the last node
+        path = stack.pop()
+        node = path[-1]
 
-    for path in possible_paths:
-        for parent in family.get_parents(path[-1]):
-            print(parent)
+        # If the node hasn't been visited:
+        if node not in visited:
 
+            # Mark as visited
+            visited.add(node)
 
-    return possible_paths
+            # Add all it's neighbors
+            for parent in family.get_parents(node):
 
-    # while family.get_parents(starting_node) != set():
-    #     for parent in family.get_parents(starting_node):
+                # Copy & append to path
+                new_path = path.copy()
+                new_path.append(parent)
 
+                # See if it's our longest_path
+                if len(new_path) > len(longest_path):
+                    longest_path = new_path
 
-    # Return the last member in the longest path
+                # push back to stack
+                stack.push(new_path)
 
+    # Return the last ancestor in the longest_path
+    return longest_path[-1]
 
 
 test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
@@ -90,4 +91,4 @@ test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9)
 # for parent in family.get_parents(6):
 #     print(parent)
 
-print(earliest_ancestor(test_ancestors, 3))
+print(earliest_ancestor(test_ancestors, 8))
