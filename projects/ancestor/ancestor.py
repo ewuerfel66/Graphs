@@ -83,12 +83,4 @@ def earliest_ancestor(ancestors, starting_node):
 
 test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
 
-# family = FamilyTree()
-
-# for pair in test_ancestors:
-#     family.add_parent_child(pair)
-
-# for parent in family.get_parents(6):
-#     print(parent)
-
 print(earliest_ancestor(test_ancestors, 8))
